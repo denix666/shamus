@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 pub struct Key {
     pub x: f32,
     pub y: f32,
-    pub texture: Vec<Texture2D>,
+    pub texture: Texture2D,
     pub rect: Rect,
     pub key_color: String,
     pub destroyed: bool,
@@ -11,44 +11,27 @@ pub struct Key {
 }
 
 impl Key {
-    pub async fn new() -> Self {
-        let mut sprites:Vec<Texture2D> = Vec::new();
-        let key_colors=["red", "purple", "green", "gold", "cyan", "blue"];
-
-        for i in key_colors.iter() {
-            let path = format!("assets/images/keys/{}.png", i);
-            sprites.push(load_texture(&path).await.unwrap());
-        }
+    pub async fn new(room: i32, key_color: &str) -> Self {
+        let path = format!("assets/images/keys/{}.png", key_color);
         
         Self {
             x: 0.0,
             y: 0.0,
-            texture: sprites,
-            rect: Rect::new(0.0, 0.0, 128.0, 128.0),
-            key_color: "".to_string(),
-            room: 0,
+            texture: load_texture(&path).await.unwrap(),
+            rect: Rect::new(0.0, 0.0, 42.0, 42.0),
+            key_color: key_color.to_string(),
+            room,
             destroyed: false,
         }
     }
 
     pub fn update(&mut self) {
-        self.rect.w = self.texture[0].width();
-        self.rect.h = self.texture[0].height();
         self.rect.x = self.x;
         self.rect.y = self.y;
     }
 
     pub fn draw(&mut self) {
         self.update();
-        match self.key_color.as_str() {
-            "red" => {draw_texture(self.texture[0], self.x, self.y, WHITE)},
-            "purple" => {draw_texture(self.texture[1], self.x, self.y, WHITE)},
-            "green" => {draw_texture(self.texture[2], self.x, self.y, WHITE)},
-            "gold" => {draw_texture(self.texture[3], self.x, self.y, WHITE)},
-            "cyan" => {draw_texture(self.texture[4], self.x, self.y, WHITE)},
-            "blue" => {draw_texture(self.texture[5], self.x, self.y, WHITE)},
-            _ => {}
-        }
-        
+        draw_texture(self.texture, self.x, self.y, WHITE);
     }
 }

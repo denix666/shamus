@@ -90,7 +90,7 @@ async fn main() {
                 if is_key_pressed(KeyCode::Space) {
                     game.level = 1;
                     game.score = 0;
-                    game.room = 0;
+                    game.room = 5;
                     game.lives = 5;
 
                     // Load water for all rooms
@@ -109,9 +109,6 @@ async fn main() {
 
                     // Load keys for all rooms
                     for room in [6, 18, 32, 44, 58, 79] {
-                        keys.push(
-                            Key::new().await
-                        );
                         let key_color = match room {
                             6 => "blue",
                             18 => "gold",
@@ -121,16 +118,13 @@ async fn main() {
                             79 => "green",
                             _ => "",
                         };
-                        let idx = keys.len() - 1;
-                        keys[idx].room = room;
-                        keys[idx].key_color = key_color.to_string();
+                        keys.push(
+                            Key::new(room, key_color).await
+                        );
                     }
 
                     // Load keyholes for all rooms
                     for room in [15, 37, 40, 47, 55, 92] {
-                        keyholes.push(
-                            KeyHole::new().await
-                        );
                         let keyhole_color = match room {
                             15 => "blue",
                             37 => "gold",
@@ -140,9 +134,9 @@ async fn main() {
                             92 => "green",
                             _ => "",
                         };
-                        let idx = keyholes.len() - 1;
-                        keyholes[idx].room = room;
-                        keyholes[idx].keyhole_color = keyhole_color.to_string();
+                        keyholes.push(
+                            KeyHole::new(room, keyhole_color).await
+                        );
                     }
 
                     // Load doors for all rooms
@@ -307,10 +301,8 @@ async fn main() {
                             keys[idx].destroyed = true;
                             let key_color = &keys[idx].key_color;
                             picked_up_keys.push(
-                                Key::new().await
+                                Key::new(-1, key_color).await
                             );
-                            let picked_up_keys_idx = picked_up_keys.len() - 1;
-                            picked_up_keys[picked_up_keys_idx].key_color = key_color.as_str().to_string();
                         }
                     },
                     None => {},

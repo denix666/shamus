@@ -74,81 +74,86 @@ async fn main() {
     let mut keyhole_placed: bool = false;
     let mut picked_up_keys: Vec<Key> = vec![];
     let mut doors: Vec<Door> = vec![];
+    let mut intro_water = Water::new(-1).await;
+    let mut intro_question = Question::new(-1).await;
+    
 
     loop {
         clear_background(BLACK);
 
         match game_state {
             GameState::Intro => {
-                game.level = 1;
-                game.score = 0;
-                game.room = 0;
-                game.lives = 5;
+                draw_texture(resources.intro, 0.0, 0.0, WHITE);
+                intro_question.draw();
+                intro_water.draw();
 
-                // Load water for all rooms
-                for room in [2, 5, 22, 38, 53, 63, 69, 74, 76] {
-                    waters.push(
-                        Water::new().await
-                    );
-                    let idx = waters.len() - 1;
-                    waters[idx].room = room;
+                if is_key_pressed(KeyCode::Space) {
+                    game.level = 1;
+                    game.score = 0;
+                    game.room = 0;
+                    game.lives = 5;
+
+                    // Load water for all rooms
+                    for room in [2, 5, 22, 38, 53, 63, 69, 74, 76] {
+                        waters.push(
+                            Water::new(room).await
+                        );
+                    }
+
+                    // Load questions for all rooms
+                    for room in [0, 9, 11, 20, 22, 24, 28, 31, 33, 51, 54, 61, 62, 68, 70, 75, 80, 81] {
+                        questions.push(
+                            Question::new(room).await
+                        );
+                    }
+
+                    // Load keys for all rooms
+                    for room in [6, 18, 32, 44, 58, 79] {
+                        keys.push(
+                            Key::new().await
+                        );
+                        let key_color = match room {
+                            6 => "blue",
+                            18 => "gold",
+                            32 => "red",
+                            44 => "cyan",
+                            58 => "purple",
+                            79 => "green",
+                            _ => "",
+                        };
+                        let idx = keys.len() - 1;
+                        keys[idx].room = room;
+                        keys[idx].key_color = key_color.to_string();
+                    }
+
+                    // Load keyholes for all rooms
+                    for room in [15, 37, 40, 47, 55, 92] {
+                        keyholes.push(
+                            KeyHole::new().await
+                        );
+                        let keyhole_color = match room {
+                            15 => "blue",
+                            37 => "gold",
+                            40 => "purple",
+                            47 => "red",
+                            55 => "cyan",
+                            92 => "green",
+                            _ => "",
+                        };
+                        let idx = keyholes.len() - 1;
+                        keyholes[idx].room = room;
+                        keyholes[idx].keyhole_color = keyhole_color.to_string();
+                    }
+
+                    // Load doors for all rooms
+                    for room in [15, 37, 40, 47, 55, 92] {
+                        doors.push(
+                            Door::new(room).await
+                        );
+                    }
+
+                    game_state = GameState::InitLevel;
                 }
-
-                // Load questions for all rooms
-                for room in [0, 9, 11, 20, 22, 24, 28, 31, 33, 51, 54, 61, 62, 68, 70, 75, 80, 81] {
-                    questions.push(
-                        Question::new().await
-                    );
-                    let idx = questions.len() - 1;
-                    questions[idx].room = room;
-                }
-
-                // Load keys for all rooms
-                for room in [6, 18, 32, 44, 58, 79] {
-                    keys.push(
-                        Key::new().await
-                    );
-                    let key_color = match room {
-                        6 => "blue",
-                        18 => "gold",
-                        32 => "red",
-                        44 => "cyan",
-                        58 => "purple",
-                        79 => "green",
-                        _ => "",
-                    };
-                    let idx = keys.len() - 1;
-                    keys[idx].room = room;
-                    keys[idx].key_color = key_color.to_string();
-                }
-
-                // Load keyholes for all rooms
-                for room in [15, 37, 40, 47, 55, 92] {
-                    keyholes.push(
-                        KeyHole::new().await
-                    );
-                    let keyhole_color = match room {
-                        15 => "blue",
-                        37 => "gold",
-                        40 => "purple",
-                        47 => "red",
-                        55 => "cyan",
-                        92 => "green",
-                        _ => "",
-                    };
-                    let idx = keyholes.len() - 1;
-                    keyholes[idx].room = room;
-                    keyholes[idx].keyhole_color = keyhole_color.to_string();
-                }
-
-                // Load doors for all rooms
-                for room in [15, 37, 40, 47, 55, 92] {
-                    doors.push(
-                        Door::new(room).await
-                    );
-                }
-
-                game_state = GameState::InitLevel;
             },
             GameState::InitLevel => {
                 points = make_room_array(game.room);

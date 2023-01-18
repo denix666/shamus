@@ -20,6 +20,7 @@ pub struct Resources {
     pub bg_k: Texture2D,
     pub bg_r: Texture2D,
     pub bg_u: Texture2D,
+    pub intro: Texture2D,
 }
 
 impl Resources {
@@ -37,6 +38,7 @@ impl Resources {
             bg_k: load_texture("assets/textures/k.png").await.unwrap(),
             bg_r: load_texture("assets/textures/r.png").await.unwrap(),
             bg_u: load_texture("assets/textures/u.png").await.unwrap(),
+            intro: load_texture("assets/images/intro.png").await.unwrap(),
         }
     }
 }

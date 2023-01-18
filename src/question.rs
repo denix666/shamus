@@ -14,7 +14,7 @@ pub struct Question {
 }
 
 impl Question {
-    pub async fn new() -> Self {
+    pub async fn new(room: i32) -> Self {
         let mut sprites:Vec<Texture2D> = Vec::new();
 
         for i in 0..=7 {
@@ -22,15 +22,20 @@ impl Question {
             sprites.push(load_texture(&path).await.unwrap());
         }
 
+        let (x, y) = match room {
+            -1 => (115.0, 130.0), // for intro
+            _ => (0.0, 0.0)
+        };
+
         Self {
-            x: 0.0,
-            y: 0.0,
+            x,
+            y,
             texture: sprites,
             update_interval: 0,
             cur_frame: 0,
             rect: Rect::new(0.0, 0.0, 28.0,28.0),
             destroyed: false,
-            room: 0,
+            room,
         }
     }
 

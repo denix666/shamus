@@ -37,6 +37,9 @@ use door::Door;
 mod player_bullet;
 use player_bullet::PlayerBullet;
 
+mod enemy;
+use enemy::Enemy;
+
 fn window_conf() -> Conf {
     let mut title = String::from("Shamus v");
     title.push_str(env!("CARGO_PKG_VERSION"));
@@ -88,6 +91,47 @@ pub enum GameState {
     GameOver,
 }
 
+async fn load_enemies(points: &Vec<Point>) -> Vec<Enemy> {
+    let mut enemies: Vec<Enemy> = Vec::new();
+    let amount_of_enemies = rand::thread_rng().gen_range(3..=12);
+
+    for idx in 0..=amount_of_enemies {
+        let mut item_placed: bool = false;
+
+        let enemy_type = match rand::thread_rng().gen_range(0..=3) {
+            0 => "A",
+            1 => "B",
+            2 => "C",
+            _ => "D",
+        };
+
+        enemies.push(
+            Enemy::new(0.0, 0.0, enemy_type).await
+        );
+
+        while !item_placed {
+            let mut place_is_a_wall = false;
+
+            enemies[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
+            enemies[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+            enemies[idx].update();
+
+            for point in points {
+                if let Some(_i) = enemies[idx].rect.intersect(point.rect) {
+                    place_is_a_wall = true;
+                    break;
+                }
+            }
+
+            if !place_is_a_wall {
+                item_placed = true;
+            }
+        }
+    }
+
+    return enemies
+}
+
 #[macroquad::main(window_conf)]
 async fn main() {
     let mut game_state = GameState::Intro;
@@ -95,21 +139,26 @@ async fn main() {
     let mut points: Vec<Point> = make_room_array(1);
     let resources = Resources::new().await;
     let mut player = Player::new().await;
-    let mut questions: Vec<Question> = vec![];
+    let mut questions: Vec<Question> = Vec::new();
     let mut question_placed: bool = false;
-    let mut waters: Vec<Water> = vec![];
+    let mut waters: Vec<Water> = Vec::new();
     let mut water_placed: bool = false;
-    let mut keys: Vec<Key> = vec![];
+    let mut keys: Vec<Key> = Vec::new();
     let mut key_placed: bool = false;
-    let mut keyholes: Vec<KeyHole> = vec![];
+    let mut keyholes: Vec<KeyHole> = Vec::new();
     let mut keyhole_placed: bool = false;
-    let mut picked_up_keys: Vec<Key> = vec![];
-    let mut doors: Vec<Door> = vec![];
+    let mut picked_up_keys: Vec<Key> = Vec::new();
+    let mut doors: Vec<Door> = Vec::new();
     let mut intro_water = Water::new(-1).await;
     let mut intro_question = Question::new(-1).await;
+    let mut intro_enemy_a = Enemy::new(690.0, 125.0, "A").await;
+    let mut intro_enemy_c = Enemy::new(690.0, 185.0, "C").await;
+    let mut intro_enemy_d = Enemy::new(690.0, 15.0, "D").await;
     let mut player_bullets: Vec<PlayerBullet> = Vec::new();
     let mut player_last_pos_x: f32 = resources::PLAYER_START_X_POS;
     let mut player_last_pos_y: f32 = resources::PLAYER_START_Y_POS;
+    let mut enemies: Vec<Enemy> = Vec::new();
+    let mut switched_room: bool = true;
     
 
     loop {
@@ -120,6 +169,9 @@ async fn main() {
                 draw_texture(resources.intro, 0.0, 0.0, WHITE);
                 intro_question.draw();
                 intro_water.draw();
+                intro_enemy_a.draw(); intro_enemy_a.update();
+                intro_enemy_c.draw(); intro_enemy_c.update();
+                intro_enemy_d.draw(); intro_enemy_d.update();
 
                 if is_key_pressed(KeyCode::Space) {
                     game.level = 1;
@@ -201,12 +253,7 @@ async fn main() {
                     game.room = room_direction(game.room, "right").room_to;
                     points = make_room_array(game.room);
                     player.x = 1.0;
-                    question_placed = false;
-                    water_placed = false;
-                    key_placed = false;
-                    keyhole_placed = false;
-                    player_last_pos_x = player.x;
-                    player_last_pos_y = player.y;
+                    switched_room = true;
                 }
 
                 if player.x < 0.0 {
@@ -214,12 +261,7 @@ async fn main() {
                     game.room = room_direction(game.room, "left").room_to;
                     points = make_room_array(game.room);
                     player.x = (RES_WIDTH - 28) as f32;
-                    question_placed = false;
-                    water_placed = false;
-                    key_placed = false;
-                    keyhole_placed = false;
-                    player_last_pos_x = player.x;
-                    player_last_pos_y = player.y;
+                    switched_room = true;
                 }
 
                 if player.y < 0.0 {
@@ -227,12 +269,7 @@ async fn main() {
                     game.room = room_direction(game.room, "up").room_to;
                     points = make_room_array(game.room);
                     player.y = (RES_HEIGHT - 28) as f32;
-                    question_placed = false;
-                    water_placed = false;
-                    key_placed = false;
-                    keyhole_placed = false;
-                    player_last_pos_x = player.x;
-                    player_last_pos_y = player.y;
+                    switched_room = true;
                 }
 
                 if player.y as i32 + 24 > RES_HEIGHT {
@@ -240,12 +277,24 @@ async fn main() {
                     game.room = room_direction(game.room, "down").room_to;
                     points = make_room_array(game.room);
                     player.y = 1.0;
+                    switched_room = true;
+                }
+
+                if switched_room {
                     question_placed = false;
                     water_placed = false;
                     key_placed = false;
                     keyhole_placed = false;
                     player_last_pos_x = player.x;
                     player_last_pos_y = player.y;
+                    enemies = load_enemies(&points).await;
+
+                    switched_room = false;
+                }
+
+                for enemy in &mut enemies {
+                    enemy.update();
+                    enemy.draw();
                 }
 
                 // QUESTIONS
@@ -456,6 +505,9 @@ async fn main() {
                 show_text(resources.font, "GAME OVER", "press 'space' to continue...");
 
                 if is_key_pressed(KeyCode::Space) {
+                    player.x = resources::PLAYER_START_X_POS;
+                    player.y = resources::PLAYER_START_Y_POS;
+                    switched_room = true;
                     game_state = GameState::Intro;
                 }
             },
@@ -507,6 +559,13 @@ async fn main() {
         match player_bullets.iter().position(|val| val.destroyed == true) {
             Some(idx) => {
                 player_bullets.remove(idx);
+            },
+            None => {},
+        };
+
+        match enemies.iter().position(|val| val.destroyed == true) {
+            Some(idx) => {
+                enemies.remove(idx);
             },
             None => {},
         };

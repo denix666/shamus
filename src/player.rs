@@ -1,9 +1,10 @@
 use macroquad::prelude::*;
 
 const ANIMATION_SPEED: i32 = 3;
-const PLAYER_SPEED: f32 = 550.0;
+const PLAYER_SPEED: f32 = 200.0;
 
-enum Dir {
+#[derive(PartialEq)]
+pub enum Dir {
     Up,
     Down,
     Left,
@@ -26,7 +27,7 @@ pub struct Player {
     update_interval: i32,
     cur_frame: usize,
     pub rect: Rect,
-    dir: Dir,
+    pub dir: Dir,
 }
 
 impl Player {

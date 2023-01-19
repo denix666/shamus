@@ -34,6 +34,9 @@ use keyhole::KeyHole;
 mod door;
 use door::Door;
 
+mod player_bullet;
+use player_bullet::PlayerBullet;
+
 fn window_conf() -> Conf {
     let mut title = String::from("Shamus v");
     title.push_str(env!("CARGO_PKG_VERSION"));
@@ -48,11 +51,39 @@ fn window_conf() -> Conf {
     }
 }
 
+fn show_text(font: Font, header_text: &str, message_text: &str) {
+    let header_dims = measure_text(header_text, Some(font), 50, 1.0);
+    let message_dims = measure_text(message_text, Some(font), 20, 1.0);
+
+    draw_text_ex(
+        &header_text,
+        screen_width() * 0.5 - header_dims.width * 0.5,
+        240.0,
+        TextParams {
+            font,
+            font_size: 50,
+            color: WHITE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex(
+        &message_text,
+        screen_width() * 0.5 - message_dims.width * 0.5,
+        280.0,
+        TextParams {
+            font,
+            font_size: 20,
+            color: WHITE,
+            ..Default::default()
+        },
+    );
+}
+
 pub enum GameState {
     Intro,
     InitLevel,
     Game,
-    LevelCompleted,
     LevelFailed,
     GameOver,
 }
@@ -76,6 +107,9 @@ async fn main() {
     let mut doors: Vec<Door> = vec![];
     let mut intro_water = Water::new(-1).await;
     let mut intro_question = Question::new(-1).await;
+    let mut player_bullets: Vec<PlayerBullet> = Vec::new();
+    let mut player_last_pos_x: f32 = resources::PLAYER_START_X_POS;
+    let mut player_last_pos_y: f32 = resources::PLAYER_START_Y_POS;
     
 
     loop {
@@ -90,7 +124,7 @@ async fn main() {
                 if is_key_pressed(KeyCode::Space) {
                     game.level = 1;
                     game.score = 0;
-                    game.room = 5;
+                    game.room = 0;
                     game.lives = 5;
 
                     // Load water for all rooms
@@ -155,21 +189,12 @@ async fn main() {
             },
             GameState::Game => {
                 draw_room(&points, &resources);
-                player.update(get_frame_time());
-                player.draw();
                 player.draw_lives(game.lives);
+                
                 draw_info(resources.font, 
                           game.score.to_string().as_str(), 
                           game.room.to_string().as_str(), 
                           game.level.to_string().as_str());
-
-
-                // Level fail
-                for point in &mut points {
-                    if let Some(_i) = player.rect.intersect(point.rect) {
-                        todo!();
-                    }
-                }
 
                 if player.x as i32 + 28 > RES_WIDTH {
                     points.clear();
@@ -180,6 +205,8 @@ async fn main() {
                     water_placed = false;
                     key_placed = false;
                     keyhole_placed = false;
+                    player_last_pos_x = player.x;
+                    player_last_pos_y = player.y;
                 }
 
                 if player.x < 0.0 {
@@ -191,6 +218,8 @@ async fn main() {
                     water_placed = false;
                     key_placed = false;
                     keyhole_placed = false;
+                    player_last_pos_x = player.x;
+                    player_last_pos_y = player.y;
                 }
 
                 if player.y < 0.0 {
@@ -202,6 +231,8 @@ async fn main() {
                     water_placed = false;
                     key_placed = false;
                     keyhole_placed = false;
+                    player_last_pos_x = player.x;
+                    player_last_pos_y = player.y;
                 }
 
                 if player.y as i32 + 24 > RES_HEIGHT {
@@ -213,6 +244,8 @@ async fn main() {
                     water_placed = false;
                     key_placed = false;
                     keyhole_placed = false;
+                    player_last_pos_x = player.x;
+                    player_last_pos_y = player.y;
                 }
 
                 // QUESTIONS
@@ -366,15 +399,65 @@ async fn main() {
                     key.y = 675.0;
                     key.draw();
                 }
-            },
-            GameState::LevelCompleted => {
 
+                player.update(get_frame_time());
+                player.draw();
+
+                // Level fail
+                for point in &mut points {
+                    if let Some(_i) = player.rect.intersect(point.rect) {
+                        game_state = GameState::LevelFailed;
+                    }
+                }
+
+                if is_key_pressed(KeyCode::LeftAlt) {
+                    if player_bullets.len() <= 3 && player.dir != player::Dir::Idle {
+                        let dir = match player.dir {
+                            player::Dir::Up=>{player_bullet::PlayerBulletDir::Up},
+                            player::Dir::Down => {player_bullet::PlayerBulletDir::Down},
+                            player::Dir::Left => {player_bullet::PlayerBulletDir::Left},
+                            player::Dir::Right => {player_bullet::PlayerBulletDir::Right},
+                            player::Dir::UpLeft => {player_bullet::PlayerBulletDir::UpLeft},
+                            player::Dir::UpRight => {player_bullet::PlayerBulletDir::UpRight},
+                            player::Dir::DownLeft => {player_bullet::PlayerBulletDir::DownLeft},
+                            player::Dir::DownRight => {player_bullet::PlayerBulletDir::DownRight},
+                            player::Dir::Idle => {player_bullet::PlayerBulletDir::Idle}, 
+                        };
+
+                        player_bullets.push(
+                            PlayerBullet::new(player.x, player.y, dir).await,
+                        );
+                    }
+                }
+
+                for player_bullet in &mut player_bullets {
+                    player_bullet.draw();
+                }
             },
             GameState::LevelFailed => {
-                
+                if game.lives > 0 {
+                    game.lives -= 1;
+                    player.x = player_last_pos_x;
+                    player.y = player_last_pos_y;
+                    player_bullets.clear();
+                    game_state = GameState::Game;
+                } else {
+                    game_state = GameState::GameOver;
+                }
             },
             GameState::GameOver => {
-                
+                draw_room(&points, &resources);
+
+                draw_info(resources.font, 
+                          game.score.to_string().as_str(), 
+                          game.room.to_string().as_str(), 
+                          game.level.to_string().as_str());
+
+                show_text(resources.font, "GAME OVER", "press 'space' to continue...");
+
+                if is_key_pressed(KeyCode::Space) {
+                    game_state = GameState::Intro;
+                }
             },
         };
 
@@ -417,6 +500,13 @@ async fn main() {
         match doors.iter().position(|val| val.destroyed == true) {
             Some(idx) => {
                 doors.remove(idx);
+            },
+            None => {},
+        };
+
+        match player_bullets.iter().position(|val| val.destroyed == true) {
+            Some(idx) => {
+                player_bullets.remove(idx);
             },
             None => {},
         };

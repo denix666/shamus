@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 extern crate rand;
-use rand::{Rng};
+use rand::{Rng, seq::SliceRandom};
 
 mod resources;
 use resources::*;
@@ -91,9 +91,9 @@ pub enum GameState {
     GameOver,
 }
 
-async fn load_enemies(points: &Vec<Point>) -> Vec<Enemy> {
+async fn load_enemies(points: &Vec<Point>, level: i32) -> Vec<Enemy> {
     let mut enemies: Vec<Enemy> = Vec::new();
-    let amount_of_enemies = rand::thread_rng().gen_range(3..=12);
+    let amount_of_enemies = rand::thread_rng().gen_range(2..=6) * level as usize;
 
     for idx in 0..=amount_of_enemies {
         let mut item_placed: bool = false;
@@ -114,7 +114,7 @@ async fn load_enemies(points: &Vec<Point>) -> Vec<Enemy> {
 
             enemies[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
             enemies[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
-            enemies[idx].update();
+            enemies[idx].update(&points, 0.0, 0.0);
 
             for point in points {
                 if let Some(_i) = enemies[idx].rect.intersect(point.rect) {
@@ -159,8 +159,9 @@ async fn main() {
     let mut player_last_pos_y: f32 = resources::PLAYER_START_Y_POS;
     let mut enemies: Vec<Enemy> = Vec::new();
     let mut switched_room: bool = true;
+    let rand_negative = vec![-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0];
+    let rand_positive = vec![1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0];
     
-
     loop {
         clear_background(BLACK);
 
@@ -169,9 +170,9 @@ async fn main() {
                 draw_texture(resources.intro, 0.0, 0.0, WHITE);
                 intro_question.draw();
                 intro_water.draw();
-                intro_enemy_a.draw(); intro_enemy_a.update();
-                intro_enemy_c.draw(); intro_enemy_c.update();
-                intro_enemy_d.draw(); intro_enemy_d.update();
+                intro_enemy_a.draw(); intro_enemy_a.update(&points, 690.0, 125.0);
+                intro_enemy_c.draw(); intro_enemy_c.update(&points, 690.0, 185.0);
+                intro_enemy_d.draw(); intro_enemy_d.update(&points, 690.0, 15.0);
 
                 if is_key_pressed(KeyCode::Space) {
                     game.level = 1;
@@ -287,14 +288,45 @@ async fn main() {
                     keyhole_placed = false;
                     player_last_pos_x = player.x;
                     player_last_pos_y = player.y;
-                    enemies = load_enemies(&points).await;
+                    player_bullets.clear();
+                    enemies = load_enemies(&points, game.level).await;
 
                     switched_room = false;
                 }
 
                 for enemy in &mut enemies {
-                    enemy.update();
+                    let prev_x = enemy.x;
+                    let prev_y = enemy.y;
+                    
+                    if enemy.x < player.x {
+                        enemy.x += rand_positive.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                    } else {
+                        enemy.x += rand_negative.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                    }
+                    
+                    if enemy.y < player.y {
+                        enemy.y += rand_positive.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                    } else {
+                        enemy.y += rand_negative.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                    }
+                    
+                    enemy.update(&points, prev_x, prev_y);
                     enemy.draw();
+
+                    for player_bullet in &mut player_bullets {
+                        if let Some(_i) = player_bullet.rect.intersect(enemy.rect) {
+                            player_bullet.destroyed = true;
+                            enemy.destroyed = true;
+                            game.score += 50;
+                            break;
+                        }
+                    }
+                    
+                    if let Some(_i) = player.rect.intersect(enemy.rect) {
+                        game_state = GameState::LevelFailed;
+                        enemy.destroyed = true;
+                        break;
+                    }
                 }
 
                 // QUESTIONS
@@ -452,10 +484,22 @@ async fn main() {
                 player.update(get_frame_time());
                 player.draw();
 
-                // Level fail
+                for player_bullet in &mut player_bullets {
+                    player_bullet.draw();
+                }
+
                 for point in &mut points {
+                    // Level fail
                     if let Some(_i) = player.rect.intersect(point.rect) {
                         game_state = GameState::LevelFailed;
+                        break;
+                    }
+                    // check bullet
+                    for player_bullet in &mut player_bullets {
+                        if let Some(_i) = player_bullet.rect.intersect(point.rect) {
+                            player_bullet.destroyed = true;
+                            break;
+                        }
                     }
                 }
 
@@ -474,14 +518,12 @@ async fn main() {
                         };
 
                         player_bullets.push(
-                            PlayerBullet::new(player.x, player.y, dir).await,
+                            PlayerBullet::new(player.x + 6.0, player.y + 4.0, dir).await,
                         );
                     }
                 }
 
-                for player_bullet in &mut player_bullets {
-                    player_bullet.draw();
-                }
+                
             },
             GameState::LevelFailed => {
                 if game.lives > 0 {
@@ -507,6 +549,7 @@ async fn main() {
                 if is_key_pressed(KeyCode::Space) {
                     player.x = resources::PLAYER_START_X_POS;
                     player.y = resources::PLAYER_START_Y_POS;
+                    picked_up_keys.clear();
                     switched_room = true;
                     game_state = GameState::Intro;
                 }

@@ -32,7 +32,7 @@ impl Enemy {
         }
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self, points: &Vec<crate::Point>, prev_x: f32, prev_y: f32) {
         self.update_interval += 1;
         if self.update_interval > ANIMATION_SPEED {
             self.update_interval = 0;
@@ -42,10 +42,16 @@ impl Enemy {
             }
         }
 
-        self.rect.w = self.texture[self.cur_frame].width();
-        self.rect.h = self.texture[self.cur_frame].height();
         self.rect.x = self.x;
         self.rect.y = self.y;
+
+        for point in points {
+            if let Some(_i) = self.rect.intersect(point.rect) {
+                self.x = prev_x;
+                self.y = prev_y;
+                break;
+            }
+        }
     }
 
     pub fn draw(&mut self) {

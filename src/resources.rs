@@ -7,6 +7,8 @@ pub const RES_HEIGHT: i32 = 720;
 pub const PLAYER_START_X_POS: f32 = 100.0;
 pub const PLAYER_START_Y_POS: f32 = 350.0;
 
+pub const ENEMY_SPEED: f32 = 100.0;
+
 pub struct Resources {
     pub font: Font,
     pub bg_a: Texture2D,

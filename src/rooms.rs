@@ -70,6 +70,9 @@ pub fn draw_room(points: &Vec<Point>, resources: &Resources) {
             "c" => {
                 draw_texture(resources.bg_c, point.x, point.y, WHITE);
             },
+            "d" => {
+                draw_texture(resources.bg_d, point.x, point.y, WHITE);
+            },
             "e" => {
                 draw_texture(resources.bg_e, point.x, point.y, WHITE);
             },
@@ -360,6 +363,183 @@ pub fn room_direction(room: i32, from_side: &str) -> crate::room_properties::Roo
         },
         (39, "down") => {
             property.room_to = 48;
+        },
+        (40, "left") => {
+            property.room_to = 39;
+        },
+        (40, "right") => {
+            property.room_to = 41;
+        },
+        (41, "left") => {
+            property.room_to = 40;
+        },
+        (41, "right") => {
+            property.room_to = 42;
+        },
+        (41, "up") => {
+            property.room_to = 43;
+        },
+        (42, "up") => {
+            property.room_to = 45;
+        },
+        (42, "left") => {
+            property.room_to = 41;
+        },
+        (43, "right") => {
+            property.room_to = 44;
+        },
+        (43, "down") => {
+            property.room_to = 41;
+        },
+        (44, "left") => {
+            property.room_to = 43;
+        },
+        (44, "right") => {
+            property.room_to = 45;
+        },
+        (45, "left") => {
+            property.room_to = 44;
+        },
+        (45, "down") => {
+            property.room_to = 42;
+        },
+        (46, "right") => {
+            property.room_to = 47;
+        },
+        (46, "down") => {
+            property.room_to = 50;
+        },
+        (47, "right") => {
+            property.room_to = 48;
+        },
+        (47, "left") => {
+            property.room_to = 46;
+        },
+        (48, "up") => {
+            property.room_to = 39;
+        },
+        (48, "left") => {
+            property.room_to = 47;
+        },
+        (49, "down") => {
+            property.room_to = 57;
+        },
+        (49, "right") => {
+            property.room_to = 50;
+        },
+        (50, "right") => {
+            property.room_to = 51;
+        },
+        (50, "left") => {
+            property.room_to = 49;
+        },
+        (50, "up") => {
+            property.room_to = 46;
+        },
+        (51, "right") => {
+            property.room_to = 52;
+        },
+        (51, "left") => {
+            property.room_to = 50;
+        },
+        (52, "right") => {
+            property.room_to = 53;
+        },
+        (52, "left") => {
+            property.room_to = 51;
+        },
+        (52, "down") => {
+            property.room_to = 59;
+        },
+        (53, "right") => {
+            property.room_to = 54;
+        },
+        (53, "left") => {
+            property.room_to = 52;
+        },
+        (54, "right") => {
+            property.room_to = 55;
+        },
+        (54, "left") => {
+            property.room_to = 53;
+        },
+        (55, "right") => {
+            property.room_to = 56;
+        },
+        (55, "left") => {
+            property.room_to = 54;
+        },
+        (56, "down") => {
+            property.room_to = 56; // to next level
+        },
+        (56, "left") => {
+            property.room_to = 55;
+        },
+        (57, "right") => {
+            property.room_to = 58;
+        },
+        (57, "up") => {
+            property.room_to = 49;
+        },
+        (58, "right") => {
+            property.room_to = 59;
+        },
+        (58, "left") => {
+            property.room_to = 57;
+        },
+        (59, "right") => {
+            property.room_to = 60;
+        },
+        (59, "left") => {
+            property.room_to = 58;
+        },
+        (59, "up") => {
+            property.room_to = 52;
+        },
+        (60, "right") => {
+            property.room_to = 61;
+        },
+        (60, "left") => {
+            property.room_to = 59;
+        },
+        (60, "down") => {
+            property.room_to = 65;
+        },
+        (61, "right") => {
+            property.room_to = 62;
+        },
+        (61, "left") => {
+            property.room_to = 60;
+        },
+        (62, "right") => {
+            property.room_to = 63;
+        },
+        (62, "left") => {
+            property.room_to = 61;
+        },
+        (63, "right") => {
+            property.room_to = 64;
+        },
+        (63, "left") => {
+            property.room_to = 62;
+        },
+        (64, "down") => {
+            property.room_to = 66;
+        },
+        (64, "left") => {
+            property.room_to = 63;
+        },
+        (65, "up") => {
+            property.room_to = 60;
+        },
+        (65, "right") => {
+            property.room_to = 66;
+        },
+        (66, "up") => {
+            property.room_to = 64;
+        },
+        (66, "left") => {
+            property.room_to = 65;
         },
         _ => {
             panic!("no instruction where to go to...")
@@ -1140,7 +1320,7 @@ pub fn make_room_array(lvl_num: i32) -> Vec<Point> {
             "        jjrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrjjjjj     ",
             "        jjrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrjjjjj     ",
         ],
-        38 => vec![
+        38 | 53 => vec![
             "jjjjjjjjjjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
             "jjjjjjjjjjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
             "jjjjjjjjjjuu        uu      uu        uujjjjj     ",
@@ -1172,7 +1352,7 @@ pub fn make_room_array(lvl_num: i32) -> Vec<Point> {
             "        jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
             "        jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
         ],
-        39 => vec![
+        39 | 52 | 60 => vec![
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
             "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
@@ -1203,6 +1383,294 @@ pub fn make_room_array(lvl_num: i32) -> Vec<Point> {
             "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
             "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjj     ",
             "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjj     ",
+        ],
+        40 | 54 | 61 => vec![
+            "iiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "iiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "iiiiiiiiiiuu        uu      uu        uuiiiii     ",
+            "iiiiiiiiiiuu        uu      uu        uuiiiii     ",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "iiiiiiiiiiuu        uu      uu        uuiiiiiiiiii",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "        iiuu                          uuiiiiiiiiii",
+            "        iiuu                          uuiiiiiiiiii",
+            "        iiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "        iiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+        ],
+        41 | 50 | 59 => vec![
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "uuuuuuuuuuuuuuuuuuuuuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "uuuuuuuuuuuuuuuuuuuuuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+            "        iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+        ],
+        42 | 48 | 66 => vec![
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "uuuuuuuuuuuuuuuuuuuuuu      uudddddddddddddddddddd",
+            "uuuuuuuuuuuuuuuuuuuuuu      uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "                            uudddddddddddddddddddd",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuudddddddddddddddddddd",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuudddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "        dddddddddddddddddddddddddddddddddddddddddd",
+            "        dddddddddddddddddddddddddddddddddddddddddd",
+            "        ddddddddddddddddddddddddddddddddddddd     ",
+            "        ddddddddddddddddddddddddddddddddddddd     ",
+        ],
+        43 | 46 | 49 => vec![
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii     ",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "iiiiiiiiiiiiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu                            ",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "iiiiiiiiiiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiuu      uuiiiiiiiiiiiiiiiiiiii",
+            "        iiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+            "        iiiiiiiiiiiiuu      uuiiiiiiiiiiiiiii     ",
+        ],
+        44 | 58 | 55 => vec![
+            "eeeeeeeeeeuuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeee     ",
+            "eeeeeeeeeeuuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeee     ",
+            "eeeeeeeeeeuu        uu      uu        uueeeee     ",
+            "eeeeeeeeeeuu        uu      uu        uueeeee     ",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "eeeeeeeeeeuu        uu      uu        uueeeeeeeeee",
+            "        eeuu        uu      uu        uueeeeeeeeee",
+            "        eeuu        uu      uu        uueeeeeeeeee",
+            "        eeuuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeee     ",
+            "        eeuuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeee     ",
+        ],
+        45 | 56 | 64 => vec![
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee     ",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee     ",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee     ",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee     ",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeeeeeeeeeeeeeeeeee",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "                            uueeeeeeeeeeeeeeeeeeee",
+            "uuuuuuuuuuuuuuuuuuuuuu      uueeeeeeeeeeeeeeeeeeee",
+            "uuuuuuuuuuuuuuuuuuuuuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "eeeeeeeeeeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "        eeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "        eeeeeeeeeeeeuu      uueeeeeeeeeeeeeeeeeeee",
+            "        eeeeeeeeeeeeuu      uueeeeeeeeeeeeeee     ",
+            "        eeeeeeeeeeeeuu      uueeeeeeeeeeeeeee     ",
+        ],
+        57 | 65 => vec![
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uuddddddddddddddd     ",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uudddddddddddddddddddd",
+            "dddddddddddddddddddduu      uuuuuuuuuuuuuuuuuuuuuu",
+            "dddddddddddddddddddduu      uuuuuuuuuuuuuuuuuuuuuu",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduu                            ",
+            "dddddddddddddddddddduuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "dddddddddddddddddddduuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "dddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "        dddddddddddddddddddddddddddddddddddddddddd",
+            "        dddddddddddddddddddddddddddddddddddddddddd",
+            "        ddddddddddddddddddddddddddddddddddddd     ",
+            "        ddddddddddddddddddddddddddddddddddddd     ",
+        ],
+        47 | 63 => vec![
+            "iiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "iiiiiiiiiiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "iiiiiiiiiiuu                          uuiiiii     ",
+            "iiiiiiiiiiuu                          uuiiiii     ",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "iiiiiiiiiiuu                          uuiiiiiiiiii",
+            "        iiuu                          uuiiiiiiiiii",
+            "        iiuu                          uuiiiiiiiiii",
+            "        iiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+            "        iiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuiiiii     ",
+        ],
+        51 | 62 => vec![
+            "dddddddddduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
+            "dddddddddduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
+            "dddddddddduu                uu        uuddddd     ",
+            "dddddddddduu                uu        uuddddd     ",
+            "dddddddddduu                uu        uudddddddddd",
+            "dddddddddduu                uu        uudddddddddd",
+            "dddddddddduu                uu        uudddddddddd",
+            "dddddddddduu                uu        uudddddddddd",
+            "dddddddddduu                uu        uudddddddddd",
+            "dddddddddduu                uu        uudddddddddd",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "                    uu      uu                    ",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "dddddddddduu        uu                uudddddddddd",
+            "dddddddddduu        uu                uudddddddddd",
+            "dddddddddduu        uu                uudddddddddd",
+            "dddddddddduu        uu                uudddddddddd",
+            "dddddddddduu        uu                uudddddddddd",
+            "dddddddddduu        uu                uudddddddddd",
+            "        dduu        uu                uudddddddddd",
+            "        dduu        uu                uudddddddddd",
+            "        dduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
+            "        dduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
         ],
         _ => panic!("no such level"),
     };

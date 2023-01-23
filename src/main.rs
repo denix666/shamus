@@ -182,9 +182,8 @@ async fn main() {
                 intro_enemy_d.draw(); intro_enemy_d.update(&points, 690.0, 15.0);
 
                 if is_key_pressed(KeyCode::Space) {
-                    game.level = 1;
                     game.score = 0;
-                    game.room = 0;
+                    game.room = 46;
                     game.lives = 5;
 
                     // Load water for all rooms
@@ -250,6 +249,13 @@ async fn main() {
             GameState::Game => {
                 draw_room(&points, &resources);
                 player.draw_lives(game.lives);
+
+                game.level = match game.room {
+                    0..=37 => 1,
+                    38..=66 => 2,
+                    67..=92 => 3,
+                    _ => 4,
+                };
                 
                 draw_info(resources.font, 
                           game.score.to_string().as_str(), 
@@ -372,11 +378,12 @@ async fn main() {
                         }
                     }
                     
-                    if let Some(_i) = player.rect.intersect(enemy.rect) {
-                        game_state = GameState::LevelFailed;
-                        enemy.destroyed = true;
-                        break;
-                    }
+                    // add on release
+                    // if let Some(_i) = player.rect.intersect(enemy.rect) {
+                    //     game_state = GameState::LevelFailed;
+                    //     enemy.destroyed = true;
+                    //     break;
+                    // }
                 }
 
                 // QUESTIONS
@@ -518,6 +525,10 @@ async fn main() {
                 match doors.iter().position(|val| val.room == game.room) {
                     Some(idx) => {
                         doors[idx].draw();
+                        // add to release
+                        // if let Some(_i) = player.rect.intersect(doors[idx].rect) {
+                        //     game_state = GameState::LevelFailed;
+                        // }
                     },
                     None => {},
                 }
@@ -547,10 +558,11 @@ async fn main() {
 
                 for point in &mut points {
                     // Level fail
-                    if let Some(_i) = player.rect.intersect(point.rect) {
-                        game_state = GameState::LevelFailed;
-                        break;
-                    }
+                    // add on release
+                    // if let Some(_i) = player.rect.intersect(point.rect) {
+                    //     game_state = GameState::LevelFailed;
+                    //     break;
+                    // }
                     // check bullet
                     for player_bullet in &mut player_bullets {
                         if let Some(_i) = player_bullet.rect.intersect(point.rect) {

@@ -344,7 +344,22 @@ pub fn room_direction(room: i32, from_side: &str) -> crate::room_properties::Roo
             property.room_to = 36;
         },
         (37, "right") => {
+            property.room_to = 38;
+        },
+        (38, "right") => {
+            property.room_to = 39;
+        },
+        (38, "left") => {
             property.room_to = 37;
+        },
+        (39, "left") => {
+            property.room_to = 38;
+        },
+        (39, "right") => {
+            property.room_to = 40;
+        },
+        (39, "down") => {
+            property.room_to = 48;
         },
         _ => {
             panic!("no instruction where to go to...")
@@ -1124,6 +1139,70 @@ pub fn make_room_array(lvl_num: i32) -> Vec<Point> {
             "        jjrr        rr                rrjjjjjjjjjj",
             "        jjrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrjjjjj     ",
             "        jjrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrjjjjj     ",
+        ],
+        38 => vec![
+            "jjjjjjjjjjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
+            "jjjjjjjjjjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
+            "jjjjjjjjjjuu        uu      uu        uujjjjj     ",
+            "jjjjjjjjjjuu        uu      uu        uujjjjj     ",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "jjjjjjjjjjuu        uu      uu        uujjjjjjjjjj",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uu      uu        uuuuuuuuuuuu",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "                    uu                            ",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "uuuuuuuuuuuu        uuuuuuuuuu        uuuuuuuuuuuu",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "jjjjjjjjjjuu                          uujjjjjjjjjj",
+            "        jjuu                          uujjjjjjjjjj",
+            "        jjuu                          uujjjjjjjjjj",
+            "        jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
+            "        jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuujjjjj     ",
+        ],
+        39 => vec![
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "uuuuuuuuuuuuuuuuuuuuuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "uuuuuuuuuuuuuuuuuuuuuu      uuuuuuuuuuuuuuuuuuuuuu",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjj     ",
+            "        jjjjjjjjjjjjuu      uujjjjjjjjjjjjjjj     ",
         ],
         _ => panic!("no such level"),
     };

@@ -40,6 +40,9 @@ use player_bullet::PlayerBullet;
 mod enemy;
 use enemy::Enemy;
 
+mod shadow;
+use shadow::Shadow;
+
 fn window_conf() -> Conf {
     let mut title = String::from("Shamus v");
     title.push_str(env!("CARGO_PKG_VERSION"));
@@ -154,6 +157,7 @@ async fn main() {
     let mut intro_enemy_a = Enemy::new(690.0, 125.0, "A").await;
     let mut intro_enemy_c = Enemy::new(690.0, 185.0, "C").await;
     let mut intro_enemy_d = Enemy::new(690.0, 15.0, "D").await;
+    let mut intro_shadow = Shadow::new(690.0, 75.0).await;
     let mut player_bullets: Vec<PlayerBullet> = Vec::new();
     let mut player_last_pos_x: f32 = resources::PLAYER_START_X_POS;
     let mut player_last_pos_y: f32 = resources::PLAYER_START_Y_POS;
@@ -161,6 +165,8 @@ async fn main() {
     let mut switched_room: bool = true;
     let rand_negative = vec![-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 1.0];
     let rand_positive = vec![1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0];
+    let mut shadows: Vec<Shadow> = Vec::new();
+    let mut time_in_the_room: f64 = 0.0;
     
     loop {
         clear_background(BLACK);
@@ -170,6 +176,7 @@ async fn main() {
                 draw_texture(resources.intro, 0.0, 0.0, WHITE);
                 intro_question.draw();
                 intro_water.draw();
+                intro_shadow.draw(); intro_shadow.update();
                 intro_enemy_a.draw(); intro_enemy_a.update(&points, 690.0, 125.0);
                 intro_enemy_c.draw(); intro_enemy_c.update(&points, 690.0, 185.0);
                 intro_enemy_d.draw(); intro_enemy_d.update(&points, 690.0, 15.0);
@@ -253,7 +260,7 @@ async fn main() {
                     points.clear();
                     game.room = room_direction(game.room, "right").room_to;
                     points = make_room_array(game.room);
-                    player.x = 1.0;
+                    player.x = 10.0;
                     switched_room = true;
                 }
 
@@ -261,7 +268,7 @@ async fn main() {
                     points.clear();
                     game.room = room_direction(game.room, "left").room_to;
                     points = make_room_array(game.room);
-                    player.x = (RES_WIDTH - 28) as f32;
+                    player.x = (RES_WIDTH - 38) as f32;
                     switched_room = true;
                 }
 
@@ -269,7 +276,7 @@ async fn main() {
                     points.clear();
                     game.room = room_direction(game.room, "up").room_to;
                     points = make_room_array(game.room);
-                    player.y = (RES_HEIGHT - 28) as f32;
+                    player.y = (RES_HEIGHT - 38) as f32;
                     switched_room = true;
                 }
 
@@ -277,7 +284,7 @@ async fn main() {
                     points.clear();
                     game.room = room_direction(game.room, "down").room_to;
                     points = make_room_array(game.room);
-                    player.y = 1.0;
+                    player.y = 10.0;
                     switched_room = true;
                 }
 
@@ -289,9 +296,52 @@ async fn main() {
                     player_last_pos_x = player.x;
                     player_last_pos_y = player.y;
                     player_bullets.clear();
+                    shadows.clear();
                     enemies = load_enemies(&points, game.level).await;
-
+                    time_in_the_room = get_time();
                     switched_room = false;
+                }
+
+                if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM {
+                    if shadows.len() <= 0 {
+                        let x = if player.x < screen_width() / 2.0 {
+                            300.0
+                        } else {
+                            900.0
+                        };
+
+                        shadows.push(
+                            Shadow::new(x, -28.0).await
+                        );
+                    }
+                }
+
+                for shadow in &mut shadows {
+                    if !shadow.freeze {
+                        if shadow.x < player.x {
+                            shadow.x += resources::SHADOW_SPEED * get_frame_time();
+                        } else {
+                            shadow.x -= resources::SHADOW_SPEED * get_frame_time();
+                        }
+                
+                        if shadow.y < player.y {
+                            shadow.y += resources::SHADOW_SPEED * get_frame_time();
+                        } else {
+                            shadow.y -= resources::SHADOW_SPEED * get_frame_time();
+                        }
+                        shadow.update();
+                    } else {
+                        if get_time() - shadow.freeze_time > resources::SHADOW_FREEZE_TIME {
+                            shadow.freeze = false;
+                        }
+                    }
+
+                    if let Some(_i) = player.rect.intersect(shadow.rect) {
+                        game_state = GameState::LevelFailed;
+                        break;
+                    }
+
+                    shadow.draw();
                 }
 
                 for enemy in &mut enemies {
@@ -486,6 +536,13 @@ async fn main() {
 
                 for player_bullet in &mut player_bullets {
                     player_bullet.draw();
+                    if shadows.len() > 0 {
+                        if let Some(_i) = player_bullet.rect.intersect(shadows[0].rect) {
+                            shadows[0].freeze = true;
+                            shadows[0].freeze_time = get_time();
+                            player_bullet.destroyed = true;
+                        }
+                    }
                 }
 
                 for point in &mut points {
@@ -531,6 +588,8 @@ async fn main() {
                     player.x = player_last_pos_x;
                     player.y = player_last_pos_y;
                     player_bullets.clear();
+                    time_in_the_room = get_time();
+                    shadows.clear();
                     game_state = GameState::Game;
                 } else {
                     game_state = GameState::GameOver;

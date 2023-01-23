@@ -9,6 +9,11 @@ pub const PLAYER_START_Y_POS: f32 = 350.0;
 
 pub const ENEMY_SPEED: f32 = 100.0;
 
+// How match time player can be in the room before the shadow get in
+pub const MAX_TIME_IN_THE_ROOM: f64 = 12.0;
+pub const SHADOW_SPEED: f32 = 120.0;
+pub const SHADOW_FREEZE_TIME: f64 = 2.0;
+
 pub struct Resources {
     pub font: Font,
     pub bg_a: Texture2D,

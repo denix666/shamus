@@ -37,6 +37,9 @@ pub struct Resources {
     pub enemy_destroyed: Sound,
     pub game_over: Sound,
     pub opening_door: Sound,
+    pub time_up: Sound,
+    pub shadow: Sound,
+    pub walk: Sound,
 }
 
 impl Resources {
@@ -64,6 +67,9 @@ impl Resources {
             enemy_destroyed: load_sound("assets/sounds/enemy_destroyed.ogg").await.unwrap(),
             game_over: load_sound("assets/sounds/game_over.ogg").await.unwrap(),
             opening_door: load_sound("assets/sounds/opening_door.ogg").await.unwrap(),
+            time_up: load_sound("assets/sounds/time_up.ogg").await.unwrap(),
+            shadow: load_sound("assets/sounds/shadow.ogg").await.unwrap(),
+            walk: load_sound("assets/sounds/walk.ogg").await.unwrap(),
         }
     }
 }

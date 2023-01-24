@@ -17,24 +17,12 @@ mod game;
 use game::*;
 
 mod player;
-use player::Player;
+use player::{Player, Dir};
 
 mod room_properties;
 
-mod water;
-use water::Water;
-
-mod question;
-use question::Question;
-
-mod key;
-use key::Key;
-
-mod keyhole;
-use keyhole::KeyHole;
-
-mod door;
-use door::Door;
+mod items;
+use items::{Door, Key, Water, KeyHole, Question};
 
 mod player_bullet;
 use player_bullet::PlayerBullet;
@@ -216,6 +204,9 @@ async fn main() {
     let music_level: f32 = 0.2; // temp
     let mut player_die_animations: Vec<PlayerDieAnimation> = Vec::new();
     let mut enemy_die_animations: Vec<EnemyDieAnimation> = Vec::new();
+    let mut time_up_sound_played: bool = false;
+    let mut shadow_sound_playing: bool = false;
+    let mut walking_sound_playing: bool = false;
 
     play_sound(resources.intro_music, PlaySoundParams {
         looped: true,
@@ -316,6 +307,19 @@ async fn main() {
                     67..=92 => 3,
                     _ => 4,
                 };
+
+                if player.dir == Dir::Idle {
+                    stop_sound(resources.walk);
+                    walking_sound_playing = false;
+                } else {
+                    if !walking_sound_playing {
+                        play_sound(resources.walk, PlaySoundParams {
+                            looped: true,
+                            volume: volume_level - 0.1,
+                        });
+                        walking_sound_playing = true;
+                    }
+                }
                 
                 draw_info(resources.font, 
                           game.score.to_string().as_str(), 
@@ -370,8 +374,21 @@ async fn main() {
                     enemies = load_enemies(&points, game.level).await;
                     time_in_the_room = get_time();
                     switched_room = false;
+                    time_up_sound_played = false;
+                    shadow_sound_playing = false;
+                    stop_sound(resources.shadow);
                 }
 
+                if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM - 3.0 {
+                    if !time_up_sound_played {
+                        play_sound(resources.time_up, PlaySoundParams {
+                            looped: false,
+                            volume: volume_level,
+                        });
+                        time_up_sound_played = true;
+                    }
+                }
+                
                 if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM {
                     if shadows.len() <= 0 {
                         let x = if player.x < screen_width() / 2.0 {
@@ -400,10 +417,19 @@ async fn main() {
                             shadow.y -= resources::SHADOW_SPEED * get_frame_time();
                         }
                         shadow.update();
+                        if !shadow_sound_playing {
+                            play_sound(resources.shadow, PlaySoundParams {
+                                looped: true,
+                                volume: volume_level,
+                            });
+                            shadow_sound_playing = true;
+                        }
                     } else {
                         if get_time() - shadow.freeze_time > resources::SHADOW_FREEZE_TIME {
                             shadow.freeze = false;
                         }
+                        stop_sound(resources.shadow);
+                        shadow_sound_playing = false;
                     }
 
                     if let Some(_i) = player.rect.intersect(shadow.rect) {
@@ -705,6 +731,9 @@ async fn main() {
                     player_bullets.clear();
                     time_in_the_room = get_time();
                     shadows.clear();
+                    time_up_sound_played = false;
+                    shadow_sound_playing = false;
+                    stop_sound(resources.shadow);
                     game_state = GameState::Game;
                 } else {
                     play_sound(resources.game_over, PlaySoundParams {

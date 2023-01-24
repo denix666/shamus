@@ -1,4 +1,4 @@
-use macroquad::prelude::*;
+use macroquad::{prelude::*, audio::{load_sound, Sound}};
 
 pub const RES_WIDTH: i32 = 1200;
 pub const RES_HEIGHT: i32 = 720;
@@ -29,6 +29,14 @@ pub struct Resources {
     pub bg_r: Texture2D,
     pub bg_u: Texture2D,
     pub intro: Texture2D,
+    pub intro_music: Sound,
+    pub extra_life: Sound,
+    pub key: Sound,
+    pub question: Sound,
+    pub die: Sound,
+    pub enemy_destroyed: Sound,
+    pub game_over: Sound,
+    pub opening_door: Sound,
 }
 
 impl Resources {
@@ -48,6 +56,14 @@ impl Resources {
             bg_r: load_texture("assets/textures/r.png").await.unwrap(),
             bg_u: load_texture("assets/textures/u.png").await.unwrap(),
             intro: load_texture("assets/images/intro.png").await.unwrap(),
+            intro_music: load_sound("assets/sounds/intro_music.ogg").await.unwrap(),
+            extra_life: load_sound("assets/sounds/extra_life.ogg").await.unwrap(),
+            key: load_sound("assets/sounds/key.ogg").await.unwrap(),
+            question: load_sound("assets/sounds/question.ogg").await.unwrap(),
+            die: load_sound("assets/sounds/die.ogg").await.unwrap(),
+            enemy_destroyed: load_sound("assets/sounds/enemy_destroyed.ogg").await.unwrap(),
+            game_over: load_sound("assets/sounds/game_over.ogg").await.unwrap(),
+            opening_door: load_sound("assets/sounds/opening_door.ogg").await.unwrap(),
         }
     }
 }

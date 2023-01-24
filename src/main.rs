@@ -1,4 +1,6 @@
-use macroquad::prelude::*;
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
+use macroquad::{prelude::*, audio::{PlaySoundParams, play_sound, stop_sound}};
 extern crate rand;
 use rand::{Rng, seq::SliceRandom};
 
@@ -38,10 +40,10 @@ mod player_bullet;
 use player_bullet::PlayerBullet;
 
 mod enemy;
-use enemy::Enemy;
+use enemy::{Enemy, Shadow};
 
-mod shadow;
-use shadow::Shadow;
+mod animations;
+use animations::{PlayerDieAnimation, EnemyDieAnimation};
 
 fn window_conf() -> Conf {
     let mut title = String::from("Shamus v");
@@ -57,6 +59,48 @@ fn window_conf() -> Conf {
     }
 }
 
+fn show_intro_text(font: Font, header_text: &str, message1_text: &str, message2_text: &str) {
+    let header_dims = measure_text(header_text, Some(font), 30, 1.0);
+    let message1_dims = measure_text(message1_text, Some(font), 23, 1.0);
+    let message2_dims = measure_text(message2_text, Some(font), 23, 1.0);
+
+    draw_text_ex(
+        &header_text,
+        screen_width() / 2.0 - header_dims.width * 0.5,
+        540.0,
+        TextParams {
+            font,
+            font_size: 30,
+            color: ORANGE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex(
+        &message1_text,
+        screen_width() / 2.0 - message1_dims.width * 0.5,
+        600.0,
+        TextParams {
+            font,
+            font_size: 23,
+            color: ORANGE,
+            ..Default::default()
+        },
+    );
+
+    draw_text_ex(
+        &message2_text,
+        screen_width() / 2.0 - message2_dims.width * 0.5,
+        620.0,
+        TextParams {
+            font,
+            font_size: 23,
+            color: ORANGE,
+            ..Default::default()
+        },
+    );
+}
+
 fn show_text(font: Font, header_text: &str, message_text: &str) {
     let header_dims = measure_text(header_text, Some(font), 50, 1.0);
     let message_dims = measure_text(message_text, Some(font), 20, 1.0);
@@ -64,7 +108,7 @@ fn show_text(font: Font, header_text: &str, message_text: &str) {
     draw_text_ex(
         &header_text,
         screen_width() * 0.5 - header_dims.width * 0.5,
-        240.0,
+        340.0,
         TextParams {
             font,
             font_size: 50,
@@ -76,7 +120,7 @@ fn show_text(font: Font, header_text: &str, message_text: &str) {
     draw_text_ex(
         &message_text,
         screen_width() * 0.5 - message_dims.width * 0.5,
-        280.0,
+        380.0,
         TextParams {
             font,
             font_size: 20,
@@ -92,6 +136,7 @@ pub enum GameState {
     Game,
     LevelFailed,
     GameOver,
+    Paused,
 }
 
 async fn load_enemies(points: &Vec<Point>, level: i32) -> Vec<Enemy> {
@@ -167,6 +212,15 @@ async fn main() {
     let rand_positive = vec![1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0];
     let mut shadows: Vec<Shadow> = Vec::new();
     let mut time_in_the_room: f64 = 0.0;
+    let volume_level: f32 = 0.3; // temp
+    let music_level: f32 = 0.2; // temp
+    let mut player_die_animations: Vec<PlayerDieAnimation> = Vec::new();
+    let mut enemy_die_animations: Vec<EnemyDieAnimation> = Vec::new();
+
+    play_sound(resources.intro_music, PlaySoundParams {
+        looped: true,
+        volume: music_level,
+    });
     
     loop {
         clear_background(BLACK);
@@ -181,9 +235,14 @@ async fn main() {
                 intro_enemy_c.draw(); intro_enemy_c.update(&points, 690.0, 185.0);
                 intro_enemy_d.draw(); intro_enemy_d.update(&points, 690.0, 15.0);
 
+                show_intro_text(resources.font, 
+                    "Hit  SPACE  to  start  game", 
+                    "Up, Down, Left, Right - walk",
+                    "Alt - Shoot");
+
                 if is_key_pressed(KeyCode::Space) {
                     game.score = 0;
-                    game.room = 46;
+                    game.room = 0;
                     game.lives = 5;
 
                     // Load water for all rooms
@@ -245,6 +304,7 @@ async fn main() {
             GameState::InitLevel => {
                 points = make_room_array(game.room);
                 game_state = GameState::Game;
+                stop_sound(resources.intro_music);
             },
             GameState::Game => {
                 draw_room(&points, &resources);
@@ -265,32 +325,36 @@ async fn main() {
                 if player.x as i32 + 28 > RES_WIDTH {
                     points.clear();
                     game.room = room_direction(game.room, "right").room_to;
-                    points = make_room_array(game.room);
                     player.x = 10.0;
+                    player.update(get_frame_time());
+                    points = make_room_array(game.room);
                     switched_room = true;
                 }
 
                 if player.x < 0.0 {
                     points.clear();
                     game.room = room_direction(game.room, "left").room_to;
-                    points = make_room_array(game.room);
                     player.x = (RES_WIDTH - 38) as f32;
+                    player.update(get_frame_time());
+                    points = make_room_array(game.room);
                     switched_room = true;
                 }
 
                 if player.y < 0.0 {
                     points.clear();
                     game.room = room_direction(game.room, "up").room_to;
-                    points = make_room_array(game.room);
                     player.y = (RES_HEIGHT - 38) as f32;
+                    player.update(get_frame_time());
+                    points = make_room_array(game.room);
                     switched_room = true;
                 }
 
                 if player.y as i32 + 24 > RES_HEIGHT {
                     points.clear();
                     game.room = room_direction(game.room, "down").room_to;
-                    points = make_room_array(game.room);
                     player.y = 10.0;
+                    player.update(get_frame_time());
+                    points = make_room_array(game.room);
                     switched_room = true;
                 }
 
@@ -373,17 +437,24 @@ async fn main() {
                         if let Some(_i) = player_bullet.rect.intersect(enemy.rect) {
                             player_bullet.destroyed = true;
                             enemy.destroyed = true;
+                            enemy_die_animations.push(
+                                EnemyDieAnimation::new(enemy.x, enemy.y).await,
+                            );
+                            play_sound(resources.enemy_destroyed, PlaySoundParams {
+                                looped: false,
+                                volume: volume_level,
+                            });
                             game.score += 50;
                             break;
                         }
                     }
                     
-                    // add on release
-                    // if let Some(_i) = player.rect.intersect(enemy.rect) {
-                    //     game_state = GameState::LevelFailed;
-                    //     enemy.destroyed = true;
-                    //     break;
-                    // }
+                    if let Some(_i) = player.rect.intersect(enemy.rect) {
+                        
+                        game_state = GameState::LevelFailed;
+                        enemy.destroyed = true;
+                        break;
+                    }
                 }
 
                 // QUESTIONS
@@ -410,8 +481,20 @@ async fn main() {
                         if let Some(_i) = player.rect.intersect(questions[idx].rect) {
                             questions[idx].destroyed = true;
                             let _ = match rand::thread_rng().gen::<bool>() {
-                                true => game.lives += 1,
-                                false => game.score += 100,
+                                true => {
+                                    game.lives += 1;
+                                    play_sound(resources.extra_life, PlaySoundParams {
+                                        looped: false,
+                                        volume: volume_level,
+                                    });
+                                },
+                                false => {
+                                    game.score += 100;
+                                    play_sound(resources.question, PlaySoundParams {
+                                        looped: false,
+                                        volume: volume_level,
+                                    });
+                                },
                             };
                         }
                     },
@@ -442,6 +525,10 @@ async fn main() {
                         if let Some(_i) = player.rect.intersect(waters[idx].rect) {
                             waters[idx].destroyed = true;
                             game.lives += 1;
+                            play_sound(resources.extra_life, PlaySoundParams {
+                                looped: false,
+                                volume: volume_level,
+                            });
                         }
                     },
                     None => {},
@@ -474,6 +561,10 @@ async fn main() {
                             picked_up_keys.push(
                                 Key::new(-1, key_color).await
                             );
+                            play_sound(resources.key, PlaySoundParams {
+                                looped: false,
+                                volume: volume_level,
+                            });
                         }
                     },
                     None => {},
@@ -510,6 +601,10 @@ async fn main() {
                                     match doors.iter().position(|val| val.room == game.room) {
                                         Some(idx) => {
                                             doors[idx].show_open_animation = true;
+                                            play_sound(resources.opening_door, PlaySoundParams {
+                                                looped: false,
+                                                volume: volume_level,
+                                            });
                                         },
                                         None => {},
                                     }
@@ -525,10 +620,9 @@ async fn main() {
                 match doors.iter().position(|val| val.room == game.room) {
                     Some(idx) => {
                         doors[idx].draw();
-                        // add to release
-                        // if let Some(_i) = player.rect.intersect(doors[idx].rect) {
-                        //     game_state = GameState::LevelFailed;
-                        // }
+                        if let Some(_i) = player.rect.intersect(doors[idx].rect) {
+                            game_state = GameState::LevelFailed;
+                        }
                     },
                     None => {},
                 }
@@ -558,11 +652,10 @@ async fn main() {
 
                 for point in &mut points {
                     // Level fail
-                    // add on release
-                    // if let Some(_i) = player.rect.intersect(point.rect) {
-                    //     game_state = GameState::LevelFailed;
-                    //     break;
-                    // }
+                    if let Some(_i) = player.rect.intersect(point.rect) {
+                        game_state = GameState::LevelFailed;
+                        break;
+                    }
                     // check bullet
                     for player_bullet in &mut player_bullets {
                         if let Some(_i) = player_bullet.rect.intersect(point.rect) {
@@ -592,10 +685,20 @@ async fn main() {
                     }
                 }
 
-                
+                if is_key_pressed(KeyCode::Escape) {
+                    game_state = GameState::Paused;
+                }                
             },
             GameState::LevelFailed => {
+                player_die_animations.push(
+                    PlayerDieAnimation::new(player.x, player.y).await,
+                );
+
                 if game.lives > 0 {
+                    play_sound(resources.die, PlaySoundParams {
+                        looped: false,
+                        volume: volume_level + 0.1, // because of low sound
+                    });
                     game.lives -= 1;
                     player.x = player_last_pos_x;
                     player.y = player_last_pos_y;
@@ -604,6 +707,11 @@ async fn main() {
                     shadows.clear();
                     game_state = GameState::Game;
                 } else {
+                    play_sound(resources.game_over, PlaySoundParams {
+                        looped: false,
+                        volume: volume_level,
+                    });
+
                     game_state = GameState::GameOver;
                 }
             },
@@ -625,7 +733,31 @@ async fn main() {
                     game_state = GameState::Intro;
                 }
             },
+            GameState::Paused => {
+                draw_room(&points, &resources);
+
+                draw_info(resources.font, 
+                          game.score.to_string().as_str(), 
+                          game.room.to_string().as_str(), 
+                          game.level.to_string().as_str());
+
+                player.draw_lives(game.lives);
+
+                show_text(resources.font, "GAME PAUSED", "Press 'ESCAPE' to continue...");
+
+                if is_key_pressed(KeyCode::Escape) {
+                    game_state = GameState::Game;
+                }
+            },
         };
+
+        for anmation in &mut player_die_animations {
+            anmation.draw();
+        }
+
+        for anmation in &mut enemy_die_animations {
+            anmation.draw();
+        }
 
         // GC
         match questions.iter().position(|val| val.destroyed == true) {
@@ -680,6 +812,20 @@ async fn main() {
         match enemies.iter().position(|val| val.destroyed == true) {
             Some(idx) => {
                 enemies.remove(idx);
+            },
+            None => {},
+        };
+
+        match player_die_animations.iter().position(|val| val.destroyed == true) {
+            Some(idx) => {
+                player_die_animations.remove(idx);
+            },
+            None => {},
+        };
+
+        match enemy_die_animations.iter().position(|val| val.destroyed == true) {
+            Some(idx) => {
+                enemy_die_animations.remove(idx);
             },
             None => {},
         };

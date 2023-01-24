@@ -1,7 +1,7 @@
 use macroquad::prelude::*;
 
 const ANIMATION_SPEED: i32 = 3;
-const PLAYER_SPEED: f32 = 500.0;
+const PLAYER_SPEED: f32 = 200.0;
 
 #[derive(PartialEq)]
 pub enum Dir {

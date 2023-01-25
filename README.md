@@ -5,8 +5,14 @@ _Remake of the old DOS game "shamus" written in Rust_
 Screenshot:
 ![intro](docs/gameplay.png)
 
-## Rooms and levels map:
-![img](docs/level1_map.png?raw=true "Screenshot")
+## Level 1 map:
+![intro](docs/lvl1.png)
+
+## Level 2 map:
+![intro](docs/lvl2.png)
+
+## Level 3 map:
+![intro](docs/lvl3.png)
 
 Commands to build/run:
 
@@ -26,5 +32,9 @@ cargo run
 - [x] Shadow
 - [x] End game
 - [x] Player collision with walls
+- [x] Complete level maps and add to readme
 - [ ] Improve enemy moving
 - [ ] Enemy shoots
+- [ ] Instructions
+- [ ] Show map during the game
+- [ ] Improove colors

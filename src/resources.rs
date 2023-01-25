@@ -40,6 +40,7 @@ pub struct Resources {
     pub time_up: Sound,
     pub shadow: Sound,
     pub walk: Sound,
+    pub victory: Sound,
 }
 
 impl Resources {
@@ -70,6 +71,7 @@ impl Resources {
             time_up: load_sound("assets/sounds/time_up.ogg").await.unwrap(),
             shadow: load_sound("assets/sounds/shadow.ogg").await.unwrap(),
             walk: load_sound("assets/sounds/walk.ogg").await.unwrap(),
+            victory: load_sound("assets/sounds/victory.ogg").await.unwrap(),
         }
     }
 }

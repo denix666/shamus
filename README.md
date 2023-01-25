@@ -1,12 +1,9 @@
 
 # Shamus
-_Clone of the old DOS game "shamus" written in Rust_
+_Remake of the old DOS game "shamus" written in Rust_
 
-Screenshot of the original game:
-![intro](docs/original_game.png)
-
-Screenshot of the clone:
-![intro](docs/clone.png)
+Screenshot:
+![intro](docs/gameplay.png)
 
 ## Rooms and levels map:
 ![img](docs/level1_map.png?raw=true "Screenshot")
@@ -25,3 +22,9 @@ To run:
 ```shell
 cargo run
 ```
+## TODO list:
+- [x] Shadow
+- [x] End game
+- [x] Player collision with walls
+- [ ] Improve enemy moving
+- [ ] Enemy shoots

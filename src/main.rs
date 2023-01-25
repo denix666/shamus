@@ -125,6 +125,7 @@ pub enum GameState {
     LevelFailed,
     GameOver,
     Paused,
+    GameCompleted,
 }
 
 async fn load_enemies(points: &Vec<Point>, level: i32) -> Vec<Enemy> {
@@ -371,7 +372,9 @@ async fn main() {
                     player_last_pos_y = player.y;
                     player_bullets.clear();
                     shadows.clear();
-                    enemies = load_enemies(&points, game.level).await;
+                    if game.room != 93 && game.room != 94 {
+                        enemies = load_enemies(&points, game.level).await;
+                    }
                     time_in_the_room = get_time();
                     switched_room = false;
                     time_up_sound_played = false;
@@ -379,27 +382,31 @@ async fn main() {
                     stop_sound(resources.shadow);
                 }
 
-                if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM - 3.0 {
-                    if !time_up_sound_played {
-                        play_sound(resources.time_up, PlaySoundParams {
-                            looped: false,
-                            volume: volume_level,
-                        });
-                        time_up_sound_played = true;
+                if game.room != 94 {
+                    if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM - 3.0 {
+                        if !time_up_sound_played {
+                            play_sound(resources.time_up, PlaySoundParams {
+                                looped: false,
+                                volume: volume_level,
+                            });
+                            time_up_sound_played = true;
+                        }
                     }
                 }
                 
-                if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM {
-                    if shadows.len() <= 0 {
-                        let x = if player.x < screen_width() / 2.0 {
-                            300.0
-                        } else {
-                            900.0
-                        };
+                if game.room != 94 {
+                    if get_time() - time_in_the_room > resources::MAX_TIME_IN_THE_ROOM {
+                        if shadows.len() <= 0 {
+                            let x = if player.x < screen_width() / 2.0 {
+                                300.0
+                            } else {
+                                900.0
+                            };
 
-                        shadows.push(
-                            Shadow::new(x, -28.0).await
-                        );
+                            shadows.push(
+                                Shadow::new(x, -28.0).await
+                            );
+                        }
                     }
                 }
 
@@ -662,8 +669,17 @@ async fn main() {
                     key.draw();
                 }
 
-                player.update(get_frame_time());
-                player.draw();
+                if game.room != 94 {
+                    player.update(get_frame_time());
+                    player.draw();
+                } else {
+                    stop_sound(resources.walk);
+                    play_sound(resources.victory, PlaySoundParams {
+                        looped: false,
+                        volume: volume_level,
+                    });
+                    game_state = GameState::GameCompleted;
+                }
 
                 for player_bullet in &mut player_bullets {
                     player_bullet.draw();
@@ -758,6 +774,8 @@ async fn main() {
                     player.x = resources::PLAYER_START_X_POS;
                     player.y = resources::PLAYER_START_Y_POS;
                     picked_up_keys.clear();
+                    enemies.clear();
+                    shadows.clear();
                     switched_room = true;
                     game_state = GameState::Intro;
                 }
@@ -776,6 +794,38 @@ async fn main() {
 
                 if is_key_pressed(KeyCode::Escape) {
                     game_state = GameState::Game;
+                }
+            },
+            GameState::GameCompleted => {
+                draw_room(&points, &resources);
+
+                draw_info(resources.font, 
+                          game.score.to_string().as_str(), 
+                          game.room.to_string().as_str(), 
+                          game.level.to_string().as_str());
+
+                
+                let font = resources.font;
+                draw_text_ex(
+                    "GAME COMPLETED!",
+                    300.0,
+                    255.0,
+                    TextParams {
+                        font,
+                        font_size: 40,
+                        color: WHITE,
+                        ..Default::default()
+                    },
+                );
+                
+                if is_key_pressed(KeyCode::Space) {
+                    player.x = resources::PLAYER_START_X_POS;
+                    player.y = resources::PLAYER_START_Y_POS;
+                    picked_up_keys.clear();
+                    enemies.clear();
+                    shadows.clear();
+                    switched_room = true;
+                    game_state = GameState::Intro;
                 }
             },
         };

@@ -347,7 +347,7 @@ pub fn room_direction(room: i32, from_side: &str) -> crate::room_properties::Roo
             property.room_to = 36;
         },
         (37, "right") => {
-            property.room_to = 38;
+            property.room_to = 38; // to level 2
         },
         (38, "right") => {
             property.room_to = 39;
@@ -470,7 +470,7 @@ pub fn room_direction(room: i32, from_side: &str) -> crate::room_properties::Roo
             property.room_to = 54;
         },
         (56, "down") => {
-            property.room_to = 56; // to next level
+            property.room_to = 67; // to level 3
         },
         (56, "left") => {
             property.room_to = 55;
@@ -540,6 +540,183 @@ pub fn room_direction(room: i32, from_side: &str) -> crate::room_properties::Roo
         },
         (66, "left") => {
             property.room_to = 65;
+        },
+        (67, "up") => {
+            property.room_to = 56;
+        },
+        (67, "right") => {
+            property.room_to = 68;
+        },
+        (68, "right") => {
+            property.room_to = 69;
+        },
+        (68, "left") => {
+            property.room_to = 67;
+        },
+        (69, "right") => {
+            property.room_to = 70;
+        },
+        (69, "left") => {
+            property.room_to = 68;
+        },
+        (70, "right") => {
+            property.room_to = 71;
+        },
+        (70, "left") => {
+            property.room_to = 69;
+        },
+        (71, "right") => {
+            property.room_to = 72;
+        },
+        (71, "left") => {
+            property.room_to = 70;
+        },
+        (71, "down") => {
+            property.room_to = 77;
+        },
+        (72, "left") => {
+            property.room_to = 71;
+        },
+        (72, "down") => {
+            property.room_to = 85;
+        },
+        (73, "right") => {
+            property.room_to = 74;
+        },
+        (73, "down") => {
+            property.room_to = 83;
+        },
+        (74, "right") => {
+            property.room_to = 75;
+        },
+        (74, "left") => {
+            property.room_to = 73;
+        },
+        (75, "right") => {
+            property.room_to = 76;
+        },
+        (75, "left") => {
+            property.room_to = 74;
+        },
+        (76, "right") => {
+            property.room_to = 77;
+        },
+        (76, "left") => {
+            property.room_to = 75;
+        },
+        (77, "up") => {
+            property.room_to = 71;
+        },
+        (77, "left") => {
+            property.room_to = 76;
+        },
+        (78, "up") => {
+            property.room_to = 84;
+        },
+        (78, "right") => {
+            property.room_to = 79;
+        },
+        (79, "right") => {
+            property.room_to = 80;
+        },
+        (79, "left") => {
+            property.room_to = 78;
+        },
+        (80, "right") => {
+            property.room_to = 81;
+        },
+        (80, "left") => {
+            property.room_to = 79;
+        },
+        (81, "right") => {
+            property.room_to = 82;
+        },
+        (81, "left") => {
+            property.room_to = 80;
+        },
+        (82, "left") => {
+            property.room_to = 81;
+        },
+        (82, "down") => {
+            property.room_to = 89;
+        },
+        (83, "up") => {
+            property.room_to = 73;
+        },
+        (83, "right") => {
+            property.room_to = 84;
+        },
+        (84, "right") => {
+            property.room_to = 85;
+        },
+        (84, "left") => {
+            property.room_to = 83;
+        },
+        (84, "down") => {
+            property.room_to = 78;
+        },
+        (85, "up") => {
+            property.room_to = 72;
+        },
+        (85, "left") => {
+            property.room_to = 84;
+        },
+        (86, "up") => {
+            property.room_to = 88;
+        },
+        (86, "right") => {
+            property.room_to = 87;
+        },
+        (87, "up") => {
+            property.room_to = 91;
+        },
+        (87, "left") => {
+            property.room_to = 86;
+        },
+        (88, "right") => {
+            property.room_to = 89;
+        },
+        (88, "down") => {
+            property.room_to = 86;
+        },
+        (89, "right") => {
+            property.room_to = 90;
+        },
+        (89, "left") => {
+            property.room_to = 88;
+        },
+        (89, "up") => {
+            property.room_to = 82;
+        },
+        (90, "right") => {
+            property.room_to = 91;
+        },
+        (90, "left") => {
+            property.room_to = 89;
+        },
+        (91, "right") => {
+            property.room_to = 92;
+        },
+        (91, "left") => {
+            property.room_to = 90;
+        },
+        (91, "down") => {
+            property.room_to = 87;
+        },
+        (92, "right") => {
+            property.room_to = 93;
+        },
+        (92, "left") => {
+            property.room_to = 91;
+        },
+        (93, "right") => {
+            property.room_to = 94;
+        },
+        (93, "left") => {
+            property.room_to = 92;
+        },
+        (94, "left") => {
+            property.room_to = 93;
         },
         _ => {
             panic!("no instruction where to go to...")
@@ -1671,6 +1848,582 @@ pub fn make_room_array(lvl_num: i32) -> Vec<Point> {
             "        dduu        uu                uudddddddddd",
             "        dduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
             "        dduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuddddd     ",
+        ],
+        67 => vec![
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      gggggggggggggggggggggg",
+            "aaaaaaaaaaaaaaaaaaaagg      gggggggggggggggggggggg",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagg                            ",
+            "aaaaaaaaaaaaaaaaaaaagggggggggggggggggggggggggggggg",
+            "aaaaaaaaaaaaaaaaaaaagggggggggggggggggggggggggggggg",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+            "        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+        ],
+        68 => vec![
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "                    gg                            ",
+            "                    gg                            ",
+            "                    gg                            ",
+            "                    gg                            ",
+            "                    gg                            ",
+            "                    gg                            ",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+        ],
+        69 => vec![
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaa     ",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "                    gg      gg                    ",
+            "                    gg      gg                    ",
+            "                    gg      gg                    ",
+            "                    gg      gg                    ",
+            "                    gg                            ",
+            "                    gg                            ",
+            "gggggggggggg        ggg   gggg        gggggggggggg",
+            "gggggggggggg        ggg   gggg        gggggggggggg",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+        ],
+        70 | 92 => vec![
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaaggggggggggggggggggggggggggggggaaaaa     ",
+            "aaaaaaaaaagg        gg                ggaaaaa     ",
+            "aaaaaaaaaagg        gg                ggaaaaa     ",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "aaaaaaaaaagg        gg                ggaaaaaaaaaa",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "gggggggggggg        gggggggggg        gggggggggggg",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "aaaaaaaaaagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aagg                gg        ggaaaaaaaaaa",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+            "        aaggggggggggggggggggggggggggggggaaaaa     ",
+        ],
+        71 | 84 | 91 => vec![
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa     ",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "aaaaaaaaaaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaagg      ggaaaaaaaaaaaaaaaaaaaa",
+            "        aaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+            "        aaaaaaaaaaaagg      ggaaaaaaaaaaaaaaa     ",
+        ],
+        72 | 82 => vec![
+            "ccccccccccccccccccccccccccccccccccccccccccccc     ",
+            "ccccccccccccccccccccccccccccccccccccccccccccc     ",
+            "ccccccccccccccccccccccccccccccccccccccccccccc     ",
+            "ccccccccccccccccccccccccccccccccccccccccccccc     ",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "cccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "ggggggggggggggggggggggggggggggcccccccccccccccccccc",
+            "ggggggggggggggggggggggggggggggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "                            ggcccccccccccccccccccc",
+            "gggggggggggggggggggggg      ggcccccccccccccccccccc",
+            "gggggggggggggggggggggg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "ccccccccccccccccccccgg      ggcccccccccccccccccccc",
+            "        ccccccccccccgg      ggcccccccccccccccccccc",
+            "        ccccccccccccgg      ggcccccccccccccccccccc",
+            "        ccccccccccccgg      ggccccccccccccccc     ",
+            "        ccccccccccccgg      ggccccccccccccccc     ",
+        ],
+        73 | 88 => vec![
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj     ",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgggggggggggggggggggggggggggggg",
+            "jjjjjjjjjjjjjjjjjjjjgggggggggggggggggggggggggggggg",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg                            ",
+            "jjjjjjjjjjjjjjjjjjjjgg      gggggggggggggggggggggg",
+            "jjjjjjjjjjjjjjjjjjjjgg      gggggggggggggggggggggg",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "jjjjjjjjjjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjjjjjjj",
+            "        jjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjj     ",
+            "        jjjjjjjjjjjjgg      ggjjjjjjjjjjjjjjj     ",
+        ],
+        74 => vec![
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "gggggggggggg                gggggggggggggggggggggg",
+            "gggggggggggg                gggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggg        ggggggggggg       gggggggggggg",
+            "gggggggggggg        ggggggggggg       gggggggggggg",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg                ggbbbbbbbbbb",
+            "        bbgg        gg                ggbbbbbbbbbb",
+            "        bbgg        gg                ggbbbbbbbbbb",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+        ],
+        75 | 90 => vec![
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "gggggggggggg        gggggggggggggggggggggggggggggg",
+            "gggggggggggg        gggggggggggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "gggggggggggg        gg      gg        gggggggggggg",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "bbbbbbbbbbgg        gg      gg        ggbbbbbbbbbb",
+            "        bbgg        gg      gg        ggbbbbbbbbbb",
+            "        bbgg        gg      gg        ggbbbbbbbbbb",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+        ],
+        76 => vec![
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gggggggggggggg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gggggggggggggg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                  gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                  gg      ggbbbbbbbbbb",
+            "gggggggggggg                  gg      gggggggggggg",
+            "gggggggggggg                  gg      gggggggggggg",
+            "                  gg                              ",
+            "                  gg                              ",
+            "                  gg                              ",
+            "                  gg                              ",
+            "                  gg                              ",
+            "                  gg                              ",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "bbbbbbbbbbgg      gggggggggggggg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gggggggggggggg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "        bbgg                          ggbbbbbbbbbb",
+            "        bbgg                          ggbbbbbbbbbb",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+        ],
+        77 | 85 | 87 => vec![
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "gggggggggggggggggggggg      ggkkkkkkkkkkkkkkkkkkkk",
+            "gggggggggggggggggggggg      ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "                            ggkkkkkkkkkkkkkkkkkkkk",
+            "ggggggggggggggggggggggggggggggkkkkkkkkkkkkkkkkkkkk",
+            "ggggggggggggggggggggggggggggggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+        ],
+        78 | 83 | 86 => vec![
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      gggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkgg      gggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgg                            ",
+            "kkkkkkkkkkkkkkkkkkkkgggggggggggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkgggggggggggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+        ],
+        79 => vec![
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbggggggggggggggggggggggggggggggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbb     ",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg  gggggg  gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg  gggggg  gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg          gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg          gg      ggbbbbbbbbbb",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                  gggggggggggggg                  ",
+            "                  gggggggggggggg                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "gggggggggggg      gg          gg      gggggggggggg",
+            "bbbbbbbbbbgg      gg          gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg          gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg  gggggg  gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg      gg  gggggg  gg      ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "bbbbbbbbbbgg                          ggbbbbbbbbbb",
+            "        bbgg                          ggbbbbbbbbbb",
+            "        bbgg                          ggbbbbbbbbbb",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+            "        bbggggggggggggggggggggggggggggggbbbbb     ",
+        ],
+        80 => vec![
+            "iiiiiiiiiiggggggggggggggggggggggggggggggiiiii     ",
+            "iiiiiiiiiiggggggggggggggggggggggggggggggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "        iigg                          ggiiiiiiiiii",
+            "        iigg                          ggiiiiiiiiii",
+            "        iiggggggggggggggggggggggggggggggiiiii     ",
+            "        iiggggggggggggggggggggggggggggggiiiii     ",
+        ],
+        81 => vec![
+            "iiiiiiiiiiggggggggggggggggggggggggggggggiiiii     ",
+            "iiiiiiiiiiggggggggggggggggggggggggggggggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiii     ",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "gggggggggggggggggggggg        gg      gggggggggggg",
+            "gggggggggggggggggggggg        gg      gggggggggggg",
+            "                    gg        gg                  ",
+            "                    gg        gg                  ",
+            "                    gg        gg                  ",
+            "                    gg        gg                  ",
+            "                    gg        gg                  ",
+            "                    gg        gg                  ",
+            "gggggggggggg        gg        gggggggggggggggggggg",
+            "gggggggggggg        gg        gggggggggggggggggggg",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "iiiiiiiiiigg                          ggiiiiiiiiii",
+            "        iigg                          ggiiiiiiiiii",
+            "        iigg                          ggiiiiiiiiii",
+            "        iiggggggggggggggggggggggggggggggiiiii     ",
+            "        iiggggggggggggggggggggggggggggggiiiii     ",
+        ],
+        89 => vec![
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkgg      ggkkkkkkkkkkkkkkkkkkkk",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "gggggggggggggggggggggg      gggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+        ],
+        93 => vec![
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "                                                  ",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "gggggggggggggggggggggggggggggggggggggggggggggggggg",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+            "        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk     ",
+        ],
+        94 => vec![
+            "ggggggggggggggggggggggggggggggggggggggggggggg     ",
+            "gg                                         gg     ",
+            "gg                                         gg     ",
+            "gg       gg  ggg  ggg  gg  gggg ggg gg     gg     ",
+            "gg      g  g g  g g   g  g  gg  g   g g    ggggggg",
+            "gg      g    g  g g   g  g  gg  g   g g         gg",
+            "gg      g    ggg  gg  gggg  gg  gg  g g         gg",
+            "gg      g  g g g  g   g  g  gg  g   g g         gg",
+            "gg       gg  g  g ggg g  g  gg  ggg gg          gg",
+            "gg                                              gg",
+            "gg                                              gg",
+            "gg               g                              gg",
+            "                 g                              gg",
+            "                 gg  g g        ggg  g  ggg ggg gg",
+            "                 g g g g          g g g   g   g gg",
+            "                 gg   gg        ggg g g ggg ggg gg",
+            "                       g        g   g g g     g gg",
+            "                     gg         ggg  g  ggg ggg gg",
+            "gg                                              gg",
+            "gg                                              gg",
+            "gg                  ggg       g   g             gg",
+            "gg                  g  g      gg  g             gg",
+            "gg               gg g  g  gg  g g g gg          gg",
+            "gg            gg    g  g g  g g g g    gg       gg",
+            "gg               gg g  g ggg  g g g gg          gg",
+            "gggggggggg          g  g g    g  gg             gg",
+            "        gg          ggg   ggg g   g        ggggggg",
+            "        gg                                 ggggggg",
+            "        ggggggggggggggggggggggggggggggggggggg     ",
+            "        ggggggggggggggggggggggggggggggggggggg     ",
         ],
         _ => panic!("no such level"),
     };

@@ -1,8 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use macroquad::{prelude::*, audio::{PlaySoundParams, play_sound, stop_sound}};
-extern crate rand;
-use rand::{Rng, seq::SliceRandom};
+use macroquad::{prelude::*, audio::{PlaySoundParams, play_sound, stop_sound}, rand::ChooseRandom};
 
 mod resources;
 use resources::*;
@@ -130,12 +128,12 @@ pub enum GameState {
 
 async fn load_enemies(points: &Vec<Point>, level: i32) -> Vec<Enemy> {
     let mut enemies: Vec<Enemy> = Vec::new();
-    let amount_of_enemies = rand::thread_rng().gen_range(2..=6) * level as usize;
+    let amount_of_enemies = macroquad::rand::gen_range(2, 6) * level as usize;
 
     for idx in 0..=amount_of_enemies {
         let mut item_placed: bool = false;
 
-        let enemy_type = match rand::thread_rng().gen_range(0..=3) {
+        let enemy_type = match macroquad::rand::gen_range(0, 3) {
             0 => "A",
             1 => "B",
             2 => "C",
@@ -149,8 +147,8 @@ async fn load_enemies(points: &Vec<Point>, level: i32) -> Vec<Enemy> {
         while !item_placed {
             let mut place_is_a_wall = false;
 
-            enemies[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
-            enemies[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+            enemies[idx].x = macroquad::rand::gen_range(400.0, 800.0);
+            enemies[idx].y = macroquad::rand::gen_range(200.0, 500.0);
             enemies[idx].update(&points, 0.0, 0.0);
 
             for point in points {
@@ -452,15 +450,15 @@ async fn main() {
                     let prev_y = enemy.y;
                     
                     if enemy.x < player.x {
-                        enemy.x += rand_positive.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                        enemy.x += rand_positive.choose().unwrap() * resources::ENEMY_SPEED * get_frame_time();
                     } else {
-                        enemy.x += rand_negative.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                        enemy.x += rand_negative.choose().unwrap() * resources::ENEMY_SPEED * get_frame_time();
                     }
                     
                     if enemy.y < player.y {
-                        enemy.y += rand_positive.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                        enemy.y += rand_positive.choose().unwrap() * resources::ENEMY_SPEED * get_frame_time();
                     } else {
-                        enemy.y += rand_negative.choose(&mut rand::thread_rng()).unwrap() * resources::ENEMY_SPEED * get_frame_time();
+                        enemy.y += rand_negative.choose().unwrap() * resources::ENEMY_SPEED * get_frame_time();
                     }
                     
                     enemy.update(&points, prev_x, prev_y);
@@ -495,8 +493,8 @@ async fn main() {
                     Some(idx) => {
                         while !question_placed {
                             let mut place_is_a_wall = false;
-                            questions[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
-                            questions[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+                            questions[idx].x = macroquad::rand::gen_range(400.0, 800.0);
+                            questions[idx].y = macroquad::rand::gen_range(200.0, 500.0);
                             questions[idx].update();
                             for point in &mut points {
                                 if let Some(_i) = questions[idx].rect.intersect(point.rect) {
@@ -513,15 +511,15 @@ async fn main() {
 
                         if let Some(_i) = player.rect.intersect(questions[idx].rect) {
                             questions[idx].destroyed = true;
-                            let _ = match rand::thread_rng().gen::<bool>() {
-                                true => {
+                            let _ = match macroquad::rand::gen_range(0, 1) {
+                                0 => {
                                     game.lives += 1;
                                     play_sound(resources.extra_life, PlaySoundParams {
                                         looped: false,
                                         volume: volume_level,
                                     });
                                 },
-                                false => {
+                                _ => {
                                     game.score += 100;
                                     play_sound(resources.question, PlaySoundParams {
                                         looped: false,
@@ -539,8 +537,8 @@ async fn main() {
                     Some(idx) => {
                         while !water_placed {
                             let mut place_is_a_wall = false;
-                            waters[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
-                            waters[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+                            waters[idx].x = macroquad::rand::gen_range(400.0, 800.0);
+                            waters[idx].y = macroquad::rand::gen_range(200.0, 500.0);
                             waters[idx].update();
                             for point in &mut points {
                                 if let Some(_i) = waters[idx].rect.intersect(point.rect) {
@@ -572,8 +570,8 @@ async fn main() {
                     Some(idx) => {
                         while !key_placed {
                             let mut place_is_a_wall = false;
-                            keys[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
-                            keys[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+                            keys[idx].x = macroquad::rand::gen_range(400.0, 800.0);
+                            keys[idx].y = macroquad::rand::gen_range(200.0, 500.0);
                             keys[idx].update();
                             for point in &mut points {
                                 if let Some(_i) = keys[idx].rect.intersect(point.rect) {
@@ -608,8 +606,8 @@ async fn main() {
                     Some(idx) => {
                         while !keyhole_placed {
                             let mut place_is_a_wall = false;
-                            keyholes[idx].x = rand::thread_rng().gen_range(400.0..=800.0);
-                            keyholes[idx].y = rand::thread_rng().gen_range(200.0..=500.0);
+                            keyholes[idx].x = macroquad::rand::gen_range(400.0, 800.0);
+                            keyholes[idx].y = macroquad::rand::gen_range(200.0, 500.0);
                             keyholes[idx].update();
                             for point in &mut points {
                                 if let Some(_i) = keyholes[idx].rect.intersect(point.rect) {
